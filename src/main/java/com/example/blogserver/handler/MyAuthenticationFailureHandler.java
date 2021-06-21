@@ -1,7 +1,9 @@
 package com.example.blogserver.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.example.blogserver.entity.ControlAccount;
 import com.example.blogserver.entity.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -21,6 +23,9 @@ import java.io.IOException;
  */
 @Component
 public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
+    @Autowired
+    ControlAccount controlAccount;
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         Response response = new Response();
@@ -30,6 +35,13 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
             response.setStatus("fail001");
             response.setMsg("账号过期");
         } else if (e instanceof BadCredentialsException) {
+            String username = httpServletRequest.getParameter("username");
+            Integer num = controlAccount.getLockTable().get(username);
+            if (null != num) {
+                controlAccount.putLockAccount(username, new Integer(num.intValue() + 1));
+            } else {
+                controlAccount.putLockAccount(username, new Integer(1));
+            }
             //密码错误
             response.setStatus("fail002");
             response.setMsg("密码错误");
@@ -49,7 +61,7 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
             //用户不存在
             response.setStatus("fail006");
             response.setMsg("用户不存在");
-        }else{
+        } else {
             //其他错误
             response.setStatus("fail000");
             response.setMsg("其他错误");
