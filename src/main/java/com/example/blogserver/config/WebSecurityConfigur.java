@@ -48,6 +48,11 @@ public class WebSecurityConfigur extends WebSecurityConfigurerAdapter {
         return new MyPasswordEncoder();
     }
 
+    /**
+     * 把我们自己实现的UserDetailsService的对象放入auth中
+     * @param auth
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
@@ -79,6 +84,7 @@ public class WebSecurityConfigur extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling()
                 .accessDeniedHandler(myAccessDeniedHandler);
         //.authenticationEntryPoint(customizeAuthenticationEntryPoint)//未登录提示语
+        //把我们自己定义的拦截器放入到HttpSecurity里
         http.addFilterBefore(myAbstractSecurityInterceptor, FilterSecurityInterceptor.class)
         ;
     }

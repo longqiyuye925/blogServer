@@ -2,9 +2,9 @@
 
 ## 登录
 
-- [ ] 一个user表
+- [ ] 基于RBAC的5张表
 - [x] token（为什么要用token?）
-- [ ] redis缓存
+- [ ] redis缓存(生成的token和存入缓存里的token不一样，缓存里的有自动转码后的)
 - [x] 报文加解密
 - [ ] 授权登录：QQ、微信
 - [x] 多次密码输入错误后，冻结账户
@@ -13,7 +13,8 @@
 - [ ] swagger（可以替代postman）
 - [ ] 账户过期
 - [x] 账户锁定
-- [ ] mysql
+- [ ] 整合MybatisPlus
+- [ ] 整合mysql
 
 思路：实现权限控制，肯定要通过Filter和interceptor来实现
 

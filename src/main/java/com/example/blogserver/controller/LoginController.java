@@ -3,12 +3,13 @@ package com.example.blogserver.controller;
 import com.example.blogserver.entity.Customer;
 
 import com.example.blogserver.entity.Response;
+import com.example.blogserver.util.JWTUtil;
+import com.example.blogserver.util.RedisUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,23 +23,28 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @RestController
 @RequestMapping("/customer")
-public class Login {
+public class LoginController {
     @Autowired
     Response response;
-    Log log = LogFactory.getLog(Login.class);
+    @Autowired
+    RedisUtil redisUtil;
+    Log log = LogFactory.getLog(LoginController.class);
 
-    @RequestMapping("/login")
-    public Response userLogin(@RequestBody Customer customer) {
+    @RequestMapping("/userValidate")
+    public Response userValidate(@RequestBody Customer customer) {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         String logintoken = servletRequestAttributes.getRequest().getHeader("logintoken");
         //校验用户
         Boolean account = volidateUser(customer, logintoken);
-        //校验权限
 
         return response;
     }
     @RequestMapping("/query")
     public Response userQuery(@RequestBody Customer customer) {
+        String tokenStr = JWTUtil.createToken("wsc");
+        System.out.println("tokenStr" + tokenStr);
+        redisUtil.setex("jinan0621",tokenStr);
+
         response.setMsg("查询成功");
         response.setStatus(Response.SUCCESS);
         return response;

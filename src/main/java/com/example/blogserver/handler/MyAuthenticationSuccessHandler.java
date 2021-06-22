@@ -3,6 +3,7 @@ package com.example.blogserver.handler;
 import com.alibaba.fastjson.JSON;
 import com.example.blogserver.entity.ControlAccount;
 import com.example.blogserver.entity.Response;
+import com.example.blogserver.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -31,11 +32,11 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         //登录成功后清除掉锁定的次数
         String username = httpServletRequest.getParameter("username");
         controlAccount.getLockTable().remove(username);
-
+        String token = JWTUtil.createToken("account");
         Response response = new Response();
         response.setStatus("666");
         response.setMsg("登录成功");
-
+        response.setToken(token);
         httpServletResponse.setContentType("text/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(response));
     }
