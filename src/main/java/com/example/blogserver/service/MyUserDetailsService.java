@@ -34,10 +34,11 @@ public class MyUserDetailsService implements UserDetailsService {
     Boolean accountNonLocked = true;
 
     /**
+     *
+     * @description 此方法会在用户登录的时候执行
      * @param username
      * @return
      * @throws UsernameNotFoundException
-     * @description 此方法会在用户登录的时候执行
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

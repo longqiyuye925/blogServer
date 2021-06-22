@@ -26,9 +26,9 @@ import java.io.IOException;
 public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     ControlAccount controlAccount;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+
         //登录成功后清除掉锁定的次数
         String username = httpServletRequest.getParameter("username");
         controlAccount.getLockTable().remove(username);
