@@ -4,7 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description:
+ * @Description:密码加解密，这里为了方便观察用tostring当做一种加密算法
  * @author: zf
  * @Param:
  * @Return:

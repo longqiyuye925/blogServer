@@ -32,6 +32,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         //登录成功后清除掉锁定的次数
         String username = httpServletRequest.getParameter("username");
         controlAccount.getLockTable().remove(username);
+        //自己编码的JWTtoken
         String token = JWTUtil.createToken("account");
         Response response = new Response();
         response.setStatus("666");

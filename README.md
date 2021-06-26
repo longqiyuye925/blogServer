@@ -13,6 +13,7 @@
 - [ ] swagger（可以替代postman）
 - [ ] 账户过期
 - [x] 账户锁定
+- [x] 基于OAuth2 整合jwt
 - [ ] 整合MybatisPlus
 - [ ] 整合mysql
 

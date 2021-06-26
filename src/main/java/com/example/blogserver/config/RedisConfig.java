@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @Date: 2021 06 2021/6/21
  */
 @Configuration
-public class RedisConfig {
+    public class RedisConfig {
     @Bean
     @SuppressWarnings("all")
     public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory){

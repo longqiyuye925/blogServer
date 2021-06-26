@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -42,11 +44,9 @@ public class WebSecurityConfigur extends WebSecurityConfigurerAdapter {
     private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
     @Autowired
     MyAccessDeniedHandler myAccessDeniedHandler;
+    @Autowired
+    private MyPasswordEncoder myPasswordEncoder;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new MyPasswordEncoder();
-    }
 
     /**
      * 把我们自己实现的UserDetailsService的对象放入auth中
@@ -55,7 +55,7 @@ public class WebSecurityConfigur extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(myUserDetailsService).passwordEncoder(myPasswordEncoder);
         ;
     }
 
@@ -87,5 +87,13 @@ public class WebSecurityConfigur extends WebSecurityConfigurerAdapter {
         //把我们自己定义的拦截器放入到HttpSecurity里
         http.addFilterBefore(myAbstractSecurityInterceptor, FilterSecurityInterceptor.class)
         ;
+    }
+    /**
+     * password密码模式需要使用此认证管理器
+     */
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
